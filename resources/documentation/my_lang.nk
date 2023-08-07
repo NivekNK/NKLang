@@ -1,0 +1,194 @@
+export("my_module")
+
+import std;
+import std::Map;
+import std::{ MyMap = Map };
+
+// All public by default
++MyEnum: enum {
+    MyEnumValue1,
+    MyEnumValue2(String),
+    MyEnumValue3(i32),
+    MyEnumValue4,
+
+    is_value_1_or_2: bool func() {
+        return self == MyEnum.MyEnumValue1 || self == MyEnum.MyEnumValue2;
+    }
+}
+
+// Enum that only works for errors
+// doesn't allow types on enum values
++MyErrorEnum: !enum {
+    Error,
+    ErrorTwo,
+    ErrorThree,
+}
+
+// Extension function for i32, for all the files that import
+// this module, because it's public
++is_more_than_3: bool i32::func() {
+    return self > 3;
+}
+
+// Parameters private by default
++MyType: type {
+    +my_public_parameter: f32 = 1.0;
+
+    my_function_parameter: i32 func(i32, i32) { +get, -set };
+    my_parameter: string { +get, -set }; // See end of file
+    my_parameter_two: string {
+        +get => [](){
+            return self.my_parameter_two;
+        },
+        -set => [](value: string){
+            self.my_parameter_two = value;
+        }
+    };
+
+    my_const_parameter: i32 const = 12;
+
+    +MyType::new() {
+        self.my_parameter = "Hello World";
+        self.my_function_parameter += [](a: i32, b: i32) {
+            return a + b;
+        };
+        self.my_function_parameter += [](a, b) => a - b;
+        return self;
+    }
+
+    -my_ret_value_func: i32 func() {
+        return 3;
+    }
+
+    +my_function: i32? func!::MyErrorEnum() {
+        // If a function returns a value, it must be assigned
+        // to a variable or ignored with just a '=' sign
+        =my_ret_value_func();
+
+        my_var: i32 = 3;
+
+        if my_var == 3 {
+            log.warn("Value is ´my_var´");
+        } else {
+            print(my_var);
+        }
+
+        my_var = my_var == 3 ? 4 : 5;
+
+        // Restricted size
+        array: i32[3] = { 0, 1, 2 };
+
+        // Same as above, but with implicit size
+        array: i32[] = { 0, 1, 2 };
+
+        for i: i32 = 0, i < 3, i++ {
+            my_var += i;
+            print(i);
+        }
+
+        for array_value: i32 = array {
+            my_var += aray_value;
+            print("´array_value´\n");
+        }
+
+        for array_value: = array {
+            println(array_value);
+        }
+
+        if my_var == 3 {
+            return my_var;
+        } else if my_var.is_more_than_3() {
+            return MyErrorEnum.ErrorMsg("Value is more than 3!");
+        }
+
+        return null;
+    }
+
+    -my_private_function: i32 func() {
+        {
+            // The type is incorrect should be i32?, because
+            // is a optional value
+            value: i32 = self.my_function();
+            // Should give a error, not handling the optional
+            // value nor the error, function doesn't return a
+            // optional value
+            return value;
+        }
+        {
+            value: i32? = self.my_function();
+            if value {
+                // Should give a error, not handling the error
+                // from the function
+                return value;
+            }
+        }
+        {
+            // Error handling by matching the possible
+            // error values
+            value: i32? = self.my_function() match {
+                Error {
+                    return 3;
+                },
+                ErrorTwo {
+                    println("Error two");
+                    return 1;
+                },
+                ErrorThree => 1,
+            };
+
+            if value {
+                return value;
+            } else {
+                return 3;
+            }
+        }
+        {
+            // Error handling by matching the possible
+            // error values and catching the return
+            // function value
+            value: i32 = self.my_function() match {
+                // If value where not a optional you
+                // could remove this
+                [value] {
+                    if value {
+                        return value;
+                    }
+                    return 5;
+                }
+                // Other option in case of a non optional value
+                // [value] => value,
+                MyErrorEnum.Error => 3,
+                MyErrorEnum.ErrorTwo => 1,
+                other_error => assert("Other Error: ´other_error´"),
+            };
+
+            return value;
+        }
+        {
+            // Also could do this to handle the optinal
+            // if it didn't return a error
+            if value = self.my_function() {
+                return value;
+            } else {
+                return 3;
+            }
+        }
+
+        // =====================
+        // If it didn't return a error,
+        // this will check if the optinal is a valid value
+        // and call another function
+        if self.my_function()?.is_more_than_3() {
+            return 3;
+        }
+        // =====================
+    }
+
+    my_parameter::get() { // Type infered by the parameter name
+        return self.my_parameter; // Does this by default
+    }
+
+    my_parameter::set(value) { // Type infered by the parameter name
+        self.my_parameter = value; // Does this by default
+    }
+}

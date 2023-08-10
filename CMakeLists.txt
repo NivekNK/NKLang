@@ -38,7 +38,7 @@ target_precompile_headers(${PROJECT_NAME} PUBLIC include/nkpch.h)
 target_sources(${PROJECT_NAME}
 PRIVATE
     src/main.cpp
-    src/core/parser.cpp
+    src/core/lexer.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

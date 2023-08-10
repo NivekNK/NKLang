@@ -82,4 +82,5 @@ namespace nk {
     private:
         TokenType value;
     };
+    Token::Integer32::Integer32(std::string value) {}
 } // namespace nk

@@ -3,22 +3,25 @@
 #include "core/lexer.h"
 
 namespace nk {
-    Lexer::Lexer(std::string input)
-        : position(0), read_position(0), ch(0), input(input) {
+    void Lexer::init(std::string input) {
+        this->position = 0;
+        this->read_position = 0;
+        this->ch = 0;
+        this->input = input;
         read_char();
     }
 
-    std::optional<Token> Lexer::next_token() {
+    Token Lexer::next_token() {
         skip_whitespace();
 
         Token token;
         switch (ch) {
             case '=': token = Token::Assign; break;
             case '+': token = Token::Plus; break;
-            case '(': token = Token::LParen; break;
-            case ')': token = Token::RParen; break;
-            case '{': token = Token::LBrace; break;
-            case '}': token = Token::RBrace; break;
+            case '(': token = Token::OpenParen; break;
+            case ')': token = Token::CloseParen; break;
+            case '{': token = Token::OpenBrace; break;
+            case '}': token = Token::CloseBrace; break;
             case ',': token = Token::Comma; break;
             case ';': token = Token::Semicolon; break;
             case ':': token = Token::Colon; break;
@@ -33,11 +36,11 @@ namespace nk {
                     } else if (identifier == "int") {
                         return Token::Int32;
                     } else {
-                        return Token::Identifier(identifier);
+                        return Token(Token::Identifier, identifier);
                     }
                 } else if (std::isdigit(ch)) {
                     auto digit = read_integer();
-                    return Token::Integer(digit);
+                    return Token(Token::LitInt32, digit);
                 } else {
                     token = Token::Invalid;
                 }

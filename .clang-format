@@ -10,8 +10,6 @@ AlignOperands: AlignAfterOperator
 AlignTrailingComments: true
 AllowShortCaseLabelsOnASingleLine: true
 AlwaysBreakTemplateDeclarations: Yes
-BinPackArguments: true
-BinPackParameters: true
 BreakBeforeTernaryOperators: true
 SpaceAfterCStyleCast: false
 SpaceAfterTemplateKeyword: false
@@ -21,6 +19,8 @@ SpacesInParentheses: false
 SpacesInSquareBrackets: false
 
 # My Config
+BinPackArguments: false
+BinPackParameters: false
 UseTab: Never
 IndentWidth: 4
 ContinuationIndentWidth: 4
@@ -33,3 +33,6 @@ AccessModifierOffset: -4
 IndentPPDirectives: BeforeHash
 AlignArrayOfStructures: Right
 IncludeBlocks: Preserve
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+PackConstructorInitializers: NextLine

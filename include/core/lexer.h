@@ -5,9 +5,10 @@
 namespace nk {
     class Lexer {
     public:
-        Lexer(std::string input);
+        Lexer() : position(0), read_position(0), ch(0) {}
 
-        std::optional<Token> next_token();
+        void init(std::string input);
+        Token next_token();
         void read_char();
         void skip_whitespace();
 

@@ -13,8 +13,24 @@ namespace nk {
 
         lookahead = lexer->next_token();
 
-        auto token = eat(Token::LitInt32);
-        auto expr = new NumericLiteral(token.value());
+        Expression* expr;
+        auto lookahead_type = this->lookahead();
+        switch (lookahead_type) {
+            case Token::LitInt32: {
+                auto token = eat(lookahead_type);
+                expr = new NumericLiteral(token.value());
+                break;
+            }
+            case Token::LitString: {
+                auto token = eat(lookahead_type);
+                expr = new StringLiteral(token.value());
+                break;
+            }
+            default:
+                std::cout << "Unexpected token: " << lookahead.to_string()
+                          << std::endl;
+                exit(1);
+        }
 
         return new Program(expr);
     }

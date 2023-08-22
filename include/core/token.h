@@ -27,9 +27,11 @@ namespace nk {
             Semicolon,
             Eof,
             Int32,
+            String,
             Invalid,
             TypeLiteral,
             LitInt32,
+            LitString,
             Identifier,
             TypeLength
         )

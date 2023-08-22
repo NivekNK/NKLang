@@ -27,7 +27,7 @@ namespace nk {
             case ':': token = Token::Colon; break;
             case 0: token = Token::Eof; break;
             default: {
-                if (std::isalpha(ch) || ch == '_') {
+                if (is_alpha(ch)) {
                     auto identifier = read_identifier();
                     if (identifier == "func") {
                         return Token::Func;
@@ -38,9 +38,12 @@ namespace nk {
                     } else {
                         return Token(Token::Identifier, identifier);
                     }
-                } else if (std::isdigit(ch)) {
+                } else if (is_digit(ch)) {
                     auto digit = read_integer();
                     return Token(Token::LitInt32, digit);
+                } else if (ch == '"') {
+                    auto string = read_string();
+                    return Token(Token::LitString, string);
                 } else {
                     token = Token::Invalid;
                 }
@@ -63,14 +66,14 @@ namespace nk {
     }
 
     void Lexer::skip_whitespace() {
-        while (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r') {
+        while (is_whitespace(ch)) {
             read_char();
         }
     }
 
     std::string Lexer::read_identifier() {
         auto pos = position;
-        while (std::isalpha(ch) || ch == '_') {
+        while (is_alpha_numeric(ch)) {
             read_char();
         }
         return input.substr(pos, position - pos);
@@ -78,9 +81,19 @@ namespace nk {
 
     std::string Lexer::read_integer() {
         auto pos = position;
-        while (std::isdigit(ch)) {
+        while (is_digit(ch)) {
             read_char();
         }
         return input.substr(pos, position - pos);
+    }
+
+    std::string Lexer::read_string() {
+        read_char();
+        auto pos = position;
+        while (ch != '"') {
+            read_char();
+        }
+        read_char();
+        return input.substr(pos, position - 1 - pos);
     }
 } // namespace nk

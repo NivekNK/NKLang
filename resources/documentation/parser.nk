@@ -1,0 +1,314 @@
+// Data Types
+
+is_true: bool = true;
+is_false: bool = false;
+
+uint_8: u8 = 255; // 8-bit unsigned integer from 0 to 255
+int_8: i8 = -128; // 8-bit signed integer from -128 to 127
+
+uint_16: u16 = 65,535; // 16-bit unsigned integer from 0 to 65,535
+int_16: i16 = -32,768; // 16-bit signed integer from -32,768 to 32,767
+
+uint_32: u32 = 4,294,967,295; // 32-bit unsigned integer from 0 to 4,294,967,295
+int_32: i32 = -2,147,483,648; // 32-bit signed integer from -2,147,483,648 to 2,147,483,647
+
+uint_64: u64 = 18,446,744,073,709,551,615; // 64-bit unsigned integer from 0 to 18,446,744,073,709,551,615
+int_64: i64 = -9,223,372,036,854,775,808; // 64-bit signed integer from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
+
+float: f32 = 3.14; // 32-bit floating point number
+double: f64 = 3.141592653589793; // 64-bit floating point number
+
+string: str = "Hello, World!"; // String of characters
+empty_string: str = ""; // Empty string
+number_string: str = "123"; // String of numbers
+
+// Expressions
+
+// Arithmetic operators
+
+add + me;
+add += me; // add = add + me;
+
+subtract - me;
+subtract -= me; // subtract = subtract - me;
+
+multiply * me;
+multiply *= me; // multiply = multiply * me;
+
+divide / me;
+divide /= me; // divide = divide / me;
+
+modulus % me;
+modulus %= me; // modulus = modulus % me;
+
+-negate_me;
+
+// Comparison and equality operators
+
+less < than;
+less_than <= or_equal;
+greater > than;
+greater_than >= or_equal;
+
+1 == 2; // false
+"cat" != "dog"; // true
+
+314 == "pi"; // false
+123 == "123"; // false
+
+// Logical operators
+
+!true; // false
+!false; // true
+
+true && false; // false
+true && true; // true
+
+false || false; // false
+true || false; // true
+
+logical_check: bool = 123 == "123" ? true : false; // false
+
+// Precedence and grouping
+
+average: f32 = (min + max) / 2;
+
+// TODO: bitwise operators
+
+// Statements
+
+println("Hello, World!);
+
+{
+    println("One!");
+    ptintln("Two!");
+}
+
+// Variables
+
+defined_constant: i32 = 123; // immutable variable
+
+breakfast: mut str = "eggs"; // mutable variable
+println(breakfast); // "eggs"
+
+berakfast = "bacon";
+println(breakfast); // "bacon"
+
+// Control Flow
+
+constant: i32; // Not defined yet
+if condition {
+    constant = 123;
+    println("true");
+} else {
+    constant = 456;
+    println("false");
+}
+// constant can't be changed after being defined
+
+i: i32 = 1;
+for i < 10 {
+    println(i);
+    i += 1;
+}
+
+for i: i32 = 1; i < 10; i += 1 {
+    println(i);
+}
+
+// TODO: foreach
+// for i: i32 = [1=..10] {
+//    println(i);
+// }
+
+// for i := range {
+//     println(i);
+// }
+
+// for i := range [0=..10] {
+//     println(i);
+// }
+
+// Functions
+
+make_breakfast(bacon, eggs, toast);
+make_breakfast();
+
+print_sum: func(a: i32, b: i32) {
+    println(a + b);
+}
+
+sum: i32 func(a: i32, b: i32) {
+    return a + b;
+}
+
+identity: <i32 func(i32, i32)> func(a: i32 func(i32, i32)) {
+    return a;
+}
+println(identity(sum)(1, 2)); // 3
+
+// Implement c# Action and Func
+
+// Classes (Types)
+
+Breakfast: type {
+    +meat: str;
+    +bread: str;
+
+    +cook: func() {
+        println("Cooking breakfast!");
+    }
+
+    +serve: func(who: str) {
+        println("Enjoy your `self.meat` and `self.bread`, `who`!");
+    }
+}
+
+breakfast := Breakfast();
+// TODO: println(breakfast); // "Breakfast" or overriding to_string function
+
+breakfast.serve("Nivek"); // "Enjoy your and , Nivek!"
+
+breakfast.meat = "bacon";
+breakfast.bread = "toast";
+breakfast.serve("Nivek"); // "Enjoy your bacon and toast, Nivek!"
+
+
+Breakfast: type {
+    meat: str;
+    bread: str;
+
+    Breakfast() {
+        self.meat = "bacon";
+        self.bread = "toast";
+    }
+
+    Breakfast(meat: str, bread: str) {
+        self.meat = meat;
+        self.bread = bread;
+    }
+
+    +cook: func() {
+        println("Cooking breakfast!");
+    }
+
+    +serve: func(who: str) {
+        println("Enjoy your `self.meat` and `self.bread`, `who`!");
+    }
+}
+
+beacon_and_toast := Breakfast();
+beacon_and_toast.serve("Nivek"); // "Enjoy your bacon and toast, Nivek!"
+
+ham_and_muffin := Breakfast("ham", "muffin");
+ham_and_muffin.serve("Nivek"); // "Enjoy your ham and muffin, Nivek!"
+
+// Interfaces
+
+IServable: interface {
+    meat: str { +get; }
+    bread: str { +get; }
+    serve: func(who: str);
+}
+
+Breakfast: IServable {
+    meat: str { +get; }
+    bread: str { +get; }
+    drink: str { +get; }
+
+    Breakfast(meat: str, bread: str, drink: str) {
+        self.meat = meat;
+        self.bread = bread;
+        self.drink = drink;
+    }
+
+    +cook: func() {
+        println("Cooking breakfast!");
+    }
+
+    +serve: func(who: str) {
+        println("Enjoy your `self.meat`, `self.bread` and `self.drink`, `who`!");
+    }
+}
+
+breakfast: IServable = Breakfast("bacon", "toast", "coffee");
+breakfast.serve("Nivek"); // "Enjoy your bacon, toast and coffee, Nivek!"
+
+// Ennumerations
+
+Color: enum {
+    White<str>,
+    Red<str>,
+    Blue<str>,
+    None,
+
+    is_red: bool func() {
+        if self == Color.Red(_) {
+            return true;
+        }
+        return false;
+    }
+}
+
+print_color: func(color: Color) {
+    if color.is_red() {
+        println("It's red!");
+    }
+
+    switch color {
+        Color.White(c) => println(c),
+        Color.Red(c) => println(c),
+        Color.Blue(c) => println(c),
+        _ => assert("Invalid color!"),
+    }
+}
+
+color := Color.Red("Red");
+print_color(color); // "It's red!"\n"Red"
+
+// Generics
+
+enum Result<V, E> {
+    Ok(V),
+    Err(E)
+}
+
+// Optional
+
+HelloWorld: type {
+    +print_hello_world: func() {
+        println("Hello, world!");
+    }
+}
+
+only_option: HelloWorld? func() {
+    return HelloWorld();
+}
+
+hello_world := only_option();
+if hello_world {
+    hello_world.print_hello_world(); // "Hello, world!"
+} else {
+    println("No value!");
+}
+
+if hello_world := only_option() {
+    hello_world.print_hello_world(); // "Hello, world!"
+} else {
+    println("No value!");
+}
+
+// "Hello, world!" if there is value
+only_option()?.print_hello_world();
+
+// Error Handling
+
+only_error: HelloWorld func()! {
+
+}
+
+// The Standard Library
+
+println("Hello, world!"); // "Hello, world!"
+assert("Crash!"); // "[path/to/file.nk line:4] Crash"
+

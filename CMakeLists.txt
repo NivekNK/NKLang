@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 
 project(nklang)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(UNIX AND NOT APPLE)
@@ -40,6 +40,9 @@ PRIVATE
     src/main.cpp
     src/core/lexer.cpp
     src/core/parser.cpp
+
+    src/system/logging_system.cpp
+    src/system/file_system.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -52,3 +55,5 @@ PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/json/include
 )
+
+add_subdirectory(tests)

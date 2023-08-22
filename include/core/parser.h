@@ -3,7 +3,6 @@
 #include "core/json.h"
 #include "core/lexer.h"
 
-
 namespace nk {
     struct Expression {
         std::string value;
@@ -30,6 +29,16 @@ namespace nk {
             return {
                 { "type", "NumericLiteral"},
                 {"value", std::stoi(value)}
+            };
+        }
+    };
+
+    struct StringLiteral : public Expression {
+        StringLiteral(std::string value) : Expression(value) {}
+        virtual json to_json() const override {
+            return {
+                { "type", "StringLiteral"},
+                {"value", value}
             };
         }
     };

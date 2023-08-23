@@ -24,3 +24,4 @@
 
 #include "core/defines.h"
 #include "system/logging_system.h"
+#include "system/assert_system.h"

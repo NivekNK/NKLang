@@ -9,7 +9,7 @@ namespace nk {
 
     Program* Parser::parse(std::string input) {
         this->input = input;
-        lexer->init(input);
+        lexer->init(input, "test.nk");
 
         lookahead = lexer->next_token();
 
@@ -35,7 +35,7 @@ namespace nk {
         return new Program(expr);
     }
 
-    Token Parser::eat(Token::Type token_type) {
+    Token Parser::eat(Token::TokenType token_type) {
         auto current_token = lookahead;
         if (lookahead == token_type) {
             lookahead = lexer->next_token();

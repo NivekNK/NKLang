@@ -66,15 +66,15 @@ namespace nk {
 
     struct LoggingSystemInfo {
         LogStyle trace_style = LogStyle{};
-        LogStyle debug_style = LogStyle{FontConsoleColor::Cyan};
-        LogStyle info_style = LogStyle{FontConsoleColor::Green};
+        LogStyle debug_style = LogStyle{FontConsoleColor::Green};
+        LogStyle info_style = LogStyle{FontConsoleColor::Cyan};
         LogStyle warn_style = LogStyle{
             FontConsoleColor::Yellow,
-            FontConsoleColor::Black,
+            FontConsoleColor::None,
             FontConsoleStyle::Bold};
         LogStyle error_style = LogStyle{
             FontConsoleColor::Red,
-            FontConsoleColor::Black,
+            FontConsoleColor::None,
             FontConsoleStyle::Bold};
         LogStyle fatal_style = LogStyle{
             FontConsoleColor::White,

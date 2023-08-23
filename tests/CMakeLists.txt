@@ -28,6 +28,8 @@ PRIVATE
     src/main.cpp
     src/core/lexer.cpp
     ../src/core/lexer.cpp
+    ../src/system/file_system.cpp
+    ../src/system/logging_system.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

@@ -12,39 +12,101 @@
 namespace nk {
     class Token {
     public:
-        using Type = u32;
+        using TokenType = u32;
         NK_TOKEN_TYPES(
-            Return,
-            Func,
-            Assign,
-            Plus,
+            Invalid,
+            EndOfFile,
+            NewLine,
+
+            // Single-character tokens
             OpenParen,
             CloseParen,
             OpenBrace,
             CloseBrace,
             Comma,
-            Colon,
+            Dot,
             Semicolon,
-            Eof,
+
+            // One or two character tokens
+            Colon,
+            ColonColon,
+            Bang,
+            BangEqual,
+            Equal,
+            EqualEqual,
+            Greater,
+            GreaterEqual,
+            Less,
+            LessEqual,
+            Pipe,
+            PipePipe,
+            And,
+            AndAnd,
+            Slash,
+            SlashEqual,
+            Percent,
+            PercentEqual,
+            Star,
+            StarEqual,
+            Plus,
+            PlusEqual,
+            PlusPlus,
+            Minus,
+            MinusEqual,
+            MinusMinus,
+
+            // Keywords
+            Type,
+            If,
+            Else,
+            True,
+            False,
+            Func,
+            For,
+            Return,
+            Self,
+            Mut,
+
+            // Types
+            Float32,
             Int32,
             String,
-            Invalid,
+
+            // Literals
             TypeLiteral,
-            LitInt32,
-            LitString,
             Identifier,
+            LitString,
+            LitFloat32,
+            LitInt32,
+
             TypeLength
         )
 
-        Token() = default;
-        Token(Type type) : type(type) {}
+        Token() : type{Token::Invalid}, line{0}, offset{0}, length{0} {}
+        Token(TokenType type, u32 line, u32 offset, u32 length)
+            : type{type}, line{line}, offset{offset}, length{length} {
+            AssertMsg(
+                type >= Token::Invalid && type < Token::TypeLength,
+                "Type should be a TokenType"
+            );
+        }
 
-        Token(Type type, std::string token_value)
-            : type(type), token_value(token_value) {
-            // assert(
-            //     type > 32 && type < 64,
-            //     "Only tokens with values can be constructed with a value"
-            // );
+        Token(
+            TokenType type,
+            u32 line,
+            u32 offset,
+            u32 length,
+            std::string token_value
+        )
+            : type{type},
+              line{line},
+              offset{offset},
+              length{length},
+              token_value{token_value} {
+            AssertMsg(
+                type > Token::TypeLiteral && type < Token::TypeLength,
+                "Only tokens literals can be constructed with a value"
+            );
         }
 
         bool has_value() const { return token_value.has_value(); }
@@ -59,16 +121,22 @@ namespace nk {
         std::string to_string() const {
             return token_names[type] + (token_value ? " " + *token_value : "");
         }
-        static std::string to_string(Type token_type) {
+        static std::string to_string(TokenType token_type) {
             return token_names[token_type];
         }
 
-        Type operator()() const { return type; }
+        TokenType operator()() const { return type; }
         bool operator==(const Token& token) const { return type == token.type; }
-        bool operator==(Type token_type) const { return type == token_type; }
+        bool operator==(TokenType token_type) const {
+            return type == token_type;
+        }
 
     private:
-        Type type = Token::Invalid;
+        TokenType type;
+        u32 line;
+        u32 offset;
+        u32 length;
+
         std::optional<std::string> token_value;
     };
 } // namespace nk

@@ -51,7 +51,7 @@ namespace nk {
         Program* parse(std::string input);
 
     private:
-        Token eat(Token::Type token);
+        Token eat(Token::TokenType token);
 
         std::string input;
         Lexer* lexer;

@@ -1,0 +1,21 @@
+%{
+#include "core/token.h"
+%}
+struct TokenKeyword {
+    const char* keyword;
+    nk::Token::TokenType token;
+};
+%%
+type, nk::Token::Type
+if, nk::Token::If
+else, nk::Token::Else
+true, nk::Token::True
+false, nk::Token::False
+func, nk::Token::Func
+for, nk::Token::For
+return, nk::Token::Return
+self, nk::Token::Self
+mut, nk::Token::Mut
+f32, nk::Token::Float32
+i32, nk::Token::Int32
+str, nk::Token::String

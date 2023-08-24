@@ -3,6 +3,7 @@
 #include "core/lexer.h"
 
 #include "core/error_handling.h"
+#include "core/token_keyword_map.h"
 
 namespace nk {
     void Lexer::init(std::string input, std::string file) {
@@ -125,16 +126,8 @@ namespace nk {
                     read_number(token);
                     return token;
                 } else if (is_alpha(ch)) {
-                    auto identifier = read_identifier();
-                    if (identifier == "func") {
-                        return Token::Func;
-                    } else if (identifier == "return") {
-                        return Token::Return;
-                    } else if (identifier == "int") {
-                        return Token::Int32;
-                    } else {
-                        return Token(Token::Identifier, identifier);
-                    }
+                    read_identifier_or_keyword(token);
+                    return token;
                 } else {
                     std::string current_line;
                     ErrorReport(
@@ -182,12 +175,71 @@ namespace nk {
         }
     }
 
-    std::string Lexer::read_identifier() {
+    void Lexer::read_identifier_or_keyword(Token& token) {
         auto pos = position;
         while (is_alpha_numeric(ch)) {
             read_char();
         }
-        return input.substr(pos, position - pos);
+
+        std::string text = input.substr(pos, position - pos);
+        const TokenKeyword* keyword =
+            TokenKeywordMap::is_valid_keyword(text.c_str(), text.length());
+
+        if (keyword == nullptr) {
+            token =
+                Token(Token::Identifier, line, position, text.length(), text);
+            return;
+        }
+
+        switch (keyword->token) {
+            // Keywords
+            case Token::Type:
+                token = Token(Token::Type, line, position, text.length());
+                break;
+            case Token::If:
+                token = Token(Token::If, line, position, text.length());
+                break;
+            case Token::Else:
+                token = Token(Token::Else, line, position, text.length());
+                break;
+            case Token::True:
+                token = Token(Token::True, line, position, text.length());
+                break;
+            case Token::False:
+                token = Token(Token::False, line, position, text.length());
+                break;
+            case Token::Func:
+                token = Token(Token::Func, line, position, text.length());
+                break;
+            case Token::For:
+                token = Token(Token::For, line, position, text.length());
+                break;
+            case Token::Return:
+                token = Token(Token::Return, line, position, text.length());
+                break;
+            case Token::Self:
+                token = Token(Token::Self, line, position, text.length());
+                break;
+            case Token::Mut:
+                token = Token(Token::Mut, line, position, text.length());
+                break;
+
+            // Types
+            case Token::Float32:
+                token = Token(Token::Float32, line, position, text.length());
+                break;
+            case Token::Int32:
+                token = Token(Token::Int32, line, position, text.length());
+                break;
+            case Token::String:
+                token = Token(Token::String, line, position, text.length());
+                break;
+
+            default:
+                token = Token(
+                    Token::Identifier, line, position, text.length(), text
+                );
+        }
     }
 
     void Lexer::read_number(Token& token) {

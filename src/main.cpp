@@ -1,6 +1,5 @@
 #include "nkpch.h"
 
-#include "core/lexer.h"
 #include "core/parser.h"
 
 int main(void) {
@@ -8,7 +7,7 @@ int main(void) {
 
     auto parser = new nk::Parser();
     auto program = R"(
-        "asdasd"
+        my_int: i32 = 5;
     )";
     auto ast = parser->parse(program);
 

@@ -13,7 +13,7 @@ namespace nk {
     private:
         void read_char();
 
-        std::string read_identifier();
+        void read_identifier_or_keyword(Token& token);
         void read_string(Token& token);
         void read_number(Token& token);
         void read_match(

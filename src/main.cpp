@@ -7,7 +7,8 @@ int main(void) {
 
     auto parser = new nk::Parser();
     auto program = R"(
-        my_int: i32 = 5;
+        ((1 + 2) * 3
+
     )";
     auto ast = parser->parse(program);
 

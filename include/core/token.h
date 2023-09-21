@@ -4,10 +4,11 @@
 
 #define NK_TOKEN_GET_TYPE(token, ...) token
 #define NK_TOKEN_GET_TYPE_TO_STRING(token, ...) #token
+#define NK_TOKEN_GET_BYTE(x, ...) 1 << (Token::x)
 #define NK_TOKEN_TYPES(...)                                                    \
     enum { MAP_LIST(NK_TOKEN_GET_TYPE, __VA_ARGS__) };                         \
     static constexpr const char* token_names[Token::TypeLength + 1] = {        \
-        MAP_LIST(NK_TOKEN_GET_TYPE_TO_STRING, __VA_ARGS__)};
+        MAP_LIST(NK_TOKEN_GET_TYPE_TO_STRING, __VA_ARGS__)}
 
 namespace nk {
     class Token {
@@ -76,11 +77,10 @@ namespace nk {
             TypeLiteral,
             Identifier,
             LitString,
-            LitFloat32,
-            LitInt32,
+            LitNumber,
 
             TypeLength
-        )
+        );
 
         Token() : type{Token::Invalid}, line{0}, offset{0}, length{0} {}
         Token(TokenType type, u32 line, u32 offset, u32 length)
@@ -118,9 +118,7 @@ namespace nk {
             return "";
         }
 
-        std::string to_string() const {
-            return token_names[type] + (token_value ? " " + *token_value : "");
-        }
+        std::string to_string() const { return token_names[type]; }
         static std::string to_string(TokenType token_type) {
             return token_names[token_type];
         }
@@ -130,6 +128,8 @@ namespace nk {
         bool operator==(TokenType token_type) const {
             return type == token_type;
         }
+
+        u32 get_line() const { return line; }
 
     private:
         TokenType type;

@@ -1,44 +1,43 @@
 #pragma once
 
-#include "core/json.h"
+#include "core/expression.h"
 #include "core/lexer.h"
+#include "core/map_macro.h"
+
+#define NK_GET_PARSER_CASE(token, ...) case token:
+#define while_match(task, ...)                                                 \
+    {                                                                          \
+        bool match = false;                                                    \
+        do {                                                                   \
+            switch (current()) {                                               \
+                MAP(NK_GET_PARSER_CASE, __VA_ARGS__) {                         \
+                    task;                        \
+                    match = true;                                              \
+                    break;                                                     \
+                }                                                              \
+                default: match = false; break;                                 \
+            }                                                                  \
+        } while (match);                                                       \
+    }
+
+#define match(task, ...)                                                       \
+    switch (current()) {                                                       \
+        MAP(NK_GET_PARSER_CASE, __VA_ARGS__) {                                 \
+            task;                                \
+            break;                                                             \
+        }                                                                      \
+        default: break;                                                        \
+    }
 
 namespace nk {
-    struct Expression {
-        std::string value;
-        Expression(std::string value) : value(value) {}
-        virtual ~Expression(){};
-        virtual json to_json() const = 0;
-    };
-
     struct Program {
-        Expression* expr;
-        Program(Expression* expr) : expr(expr) {}
+        Expr* expr;
+        Program(Expr* expr) : expr(expr) {}
         ~Program() { delete expr; }
         json to_json() const {
             return {
-                {"type",       "Program"},
+                {"kind",       "Program"},
                 {"body", expr->to_json()}
-            };
-        }
-    };
-
-    struct NumericLiteral : public Expression {
-        NumericLiteral(std::string value) : Expression(value) {}
-        virtual json to_json() const override {
-            return {
-                { "type", "NumericLiteral"},
-                {"value", std::stoi(value)}
-            };
-        }
-    };
-
-    struct StringLiteral : public Expression {
-        StringLiteral(std::string value) : Expression(value) {}
-        virtual json to_json() const override {
-            return {
-                { "type", "StringLiteral"},
-                {"value", value}
             };
         }
     };
@@ -51,10 +50,21 @@ namespace nk {
         Program* parse(std::string input);
 
     private:
-        Token eat(Token::TokenType token);
+        bool consume(Token::TokenType token, std::string_view message);
+        Token consume();
+        void advance() { current = lexer->next_token(); }
+
+        Expr* expression();
+        Expr* primary();
+        Expr* unary();
+        Expr* factor();
+        Expr* term();
+        Expr* comparison();
+        Expr* equality();
 
         std::string input;
         Lexer* lexer;
-        Token lookahead;
+
+        Token current;
     };
 } // namespace nk

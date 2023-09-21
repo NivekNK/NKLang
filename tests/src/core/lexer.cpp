@@ -36,10 +36,10 @@ TEST(Lexer, GetNextToken) {
 
 TEST(Lexer, GetNextTokenExtended) {
     std::string input = R"V0G0N(
-            five: int = 5;
-            ten: int = 10;
+            five: i32 = 5;
+            ten: i32 = 10;
 
-            add: int func(x: int, y: int) {
+            add: i32 func(x: i32, y: i32) {
                 return x + y;
             }
 
@@ -51,14 +51,14 @@ TEST(Lexer, GetNextTokenExtended) {
         nk::Token::Colon,
         nk::Token::Int32,
         nk::Token::Equal,
-        nk::Token::LitInt32, //"5"),
+        nk::Token::LitNumber, //"5"),
         nk::Token::Semicolon,
 
         nk::Token::Identifier, //"ten"),
         nk::Token::Colon,
         nk::Token::Int32,
         nk::Token::Equal,
-        nk::Token::LitInt32, //"10"),
+        nk::Token::LitNumber, //"10"),
         nk::Token::Semicolon,
 
         nk::Token::Identifier, //"add"),

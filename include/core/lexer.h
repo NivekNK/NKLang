@@ -10,6 +10,9 @@ namespace nk {
         void init(std::string input, std::string file);
         Token next_token();
 
+        u32 get_line_and_column(std::string& out_line) const;
+        std::string get_file() { return file; }
+
     private:
         void read_char();
 
@@ -39,8 +42,6 @@ namespace nk {
         bool is_alpha_numeric(char c) const {
             return is_alpha(c) || is_digit(c);
         }
-
-        u32 get_line_and_column(std::string& line) const;
 
         u32 position;
         u32 read_position;

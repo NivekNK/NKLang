@@ -109,7 +109,7 @@ namespace nk {
                 if (match('=')) {
                     token = Token(Token::MinusEqual, line, position, 2);
                     read_char();
-                } else if (match('+')) {
+                } else if (match('-')) {
                     token = Token(Token::MinusMinus, line, position, 2);
                     read_char();
                 } else {
@@ -247,18 +247,16 @@ namespace nk {
         while (is_digit(ch))
             read_char();
 
-        Token::TokenType type = Token::LitInt32;
         if (ch == '.' && is_digit(input[read_position])) {
             read_char();
 
             while (is_digit(ch))
                 read_char();
-
-            type = Token::LitFloat32;
         }
 
         std::string number = input.substr(pos, position - pos);
-        token = Token(type, line, position, number.length(), number);
+        token =
+            Token(Token::LitNumber, line, position, number.length(), number);
     }
 
     void Lexer::read_string(Token& token) {
